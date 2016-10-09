@@ -1,0 +1,24 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqp": "^0.2.6",
+    "amqplib": "^0.4.2",
+    "co": "^4.6.0",
+    "kafka-node": "^0.5.9",
+    "node-uuid": "^1.4.7"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp-typescript": "^3.0.2",
+    "gulp-watch": "^4.3.10",
+    "typescript": "^2.0.3"
+  }
+}
