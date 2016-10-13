@@ -2,6 +2,7 @@
 
 import { EventEmitter } from 'events';
 import { RPC } from './rpc';
+import { NatsRPC } from './nats-rpc';
 import { Action } from './action';
 
 export class EventBus {
@@ -11,7 +12,7 @@ export class EventBus {
   private serviceName: string;
 
   public constructor() {
-    this.rpc = new RPC();
+    this.rpc = new NatsRPC();
   }
 
   public connect(serviceName: string, cb: () => void) {
