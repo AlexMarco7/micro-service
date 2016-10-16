@@ -1,13 +1,11 @@
 
 import { Action } from '../action';
 
-export default class Teste2 extends Action{
+export default class Teste3 extends Action{
 
   public async process(data: any, headers: any, reply: (d:any) => void, fail: (e: Error) => void) {
     //console.log("teste2");
-    data.count++;
-    reply(data);
-    
-    //fail(new Error("teste")); 
+    data.count2+=2;
+    reply(data); 
   }
-}
+} 

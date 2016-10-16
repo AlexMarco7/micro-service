@@ -6,7 +6,8 @@
   ],
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
-    "noImplicitAny": false
+    "target": "ES2015",
+    "noImplicitAny": false,
+    "experimentalDecorators" : true
   }
 }

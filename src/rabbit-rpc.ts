@@ -2,6 +2,8 @@ import { v1 as uuid } from 'node-uuid';
 import { EventEmitter } from 'events';
 import { connect } from 'amqplib';
 import { Buffer } from 'buffer';
+import { encode } from 'msgpack-lite';
+import { decode } from 'msgpack-lite';
 
 export class RabbitRPC {
 
@@ -40,17 +42,17 @@ export class RabbitRPC {
     this.ch.assertQueue(address, { autoDelete: true, durable : false }).then((ok) => {
       var corrId = uuid();
       this.emitter.once(corrId, (body, error) => {
-        cb(error ? new Error(body) : null, error ? null : JSON.parse(body));
+        cb(error ? new Error(body) : null, error ? null : decode(body));
       });
-      return this.ch.sendToQueue(address, new Buffer(JSON.stringify(data)), { expiration: '30000', correlationId: corrId, replyTo: this.callbackQueue, headers: headers });
+      return this.ch.sendToQueue(address, new Buffer(encode(data)), { expiration: '30000', correlationId: corrId, replyTo: this.callbackQueue, headers: headers });
     });
   };
 
   public on(address: string, func) {
     this.ch.assertQueue(address, { autoDelete: true, durable : false }).then((ok) => {
       this.ch.consume(address, (msg) => {
-        func(JSON.parse(msg.content.toString()), msg.properties.headers, (err, data) => {
-          this.ch.sendToQueue(msg.properties.replyTo, new Buffer(err ? err.message || err : JSON.stringify(data) || {}), { expiration: '30000', correlationId: msg.properties.correlationId });
+        func(decode(msg.content.toString()), msg.properties.headers, (err, data) => {
+          this.ch.sendToQueue(msg.properties.replyTo, new Buffer(err ? err.message || err : encode(data) || {}), { expiration: '30000', correlationId: msg.properties.correlationId });
         });
       }, { noAck: true });
     });

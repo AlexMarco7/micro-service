@@ -1,24 +1,13 @@
-import { EventBus } from './event-bus';
-import { Teste } from './action/teste';
+import { MicroService } from './micro-service';
 
-var eb = new EventBus();
-eb.connect("service2", ()=>{
-  
-  eb.register(new Teste(eb));
+MicroService.start(["action", "flow"], (eb) => {
 
   var t = new Date().getTime();
 
-  var loop = function(data:any){ 
-    if(data.count < 1000)
-      eb.emit('service1@Teste', data, {header : 'header'}, (err, data) => {
-        loop(data);
-      }); 
-    else{
-      console.log("fim -- " + (new Date().getTime() - t));
-    }  
-  };
+  eb.emit('service@Teste', { count: 0, count2: 0 }, { header: 'header' }, (err, data) => {
+    console.log("fim -- " + (new Date().getTime() - t) + " - " + JSON.stringify(data) + " - " + (err ? err.message : ""));
+  });
 
-  loop({count:0});
 
 });
 

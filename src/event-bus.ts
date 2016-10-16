@@ -6,22 +6,28 @@ import { NatsRPC } from './nats-rpc';
 import { Action } from './action';
 
 export class EventBus {
+  private static _instance:EventBus;
+  public static instance():EventBus{
+    return EventBus._instance || new EventBus();
+  }
+
   private emitter: EventEmitter = new EventEmitter();
   private localAddresses: any = {};
   private rpc: RPC;
-  private serviceName: string;
+  private serviceName:string = "service";
+  private type:string = 'rpc';
 
   public constructor() {
     this.rpc = new NatsRPC();
+    EventBus._instance = this;
   }
 
-  public connect(serviceName: string, cb: () => void) {
-    this.serviceName = serviceName;
+  public connect(cb: () => void) {
     this.rpc.connect(cb);
   }
 
   public emit(address: string, data: any, headers: any, cb: (e: Error, d?: any) => void) {
-    if (this.localAddresses[address]) {
+    if (this.type != "rpc" && this.localAddresses[address]) {
       this.emitter.emit(address, data, headers, cb);
     } else {
       this.rpc.emit(address, data, headers, cb);
@@ -44,8 +50,15 @@ export class EventBus {
     this.emitter.on(addr, f);
   };
 
-  public register(action: Action) {
-    this.on(action.address(), action.process);
+  public static register(Action: new () => Action) {
+    var action:Action = new Action();
+    EventBus.instance().on(action.options().address, (data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) =>{
+      try{
+        action.process(data, headers, reply, fail);
+      }catch(e){
+        fail(e);
+      }
+    });
   }
 
 };
