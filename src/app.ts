@@ -1,6 +1,6 @@
 import { MicroService } from './micro-service';
 
-MicroService.start(["action", "flow"], (eb) => {
+MicroService.start("service", ["action", "flow"], (eb) => {
 
   var t = new Date().getTime();
 

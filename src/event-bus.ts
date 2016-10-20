@@ -15,7 +15,7 @@ export class EventBus {
   private localAddresses: any = {};
   private rpc: RPC;
   private serviceName:string = "service";
-  private type:string = 'rpc';
+  private type:string = 'auto';
 
   public constructor() {
     this.rpc = new NatsRPC();
@@ -49,16 +49,5 @@ export class EventBus {
     this.rpc.on(addr, f);
     this.emitter.on(addr, f);
   };
-
-  public static register(Action: new () => Action) {
-    var action:Action = new Action();
-    EventBus.instance().on(action.options().address, (data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) =>{
-      try{
-        action.process(data, headers, reply, fail);
-      }catch(e){
-        fail(e);
-      }
-    });
-  }
 
 };

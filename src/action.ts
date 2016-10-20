@@ -7,6 +7,18 @@ export class Action {
 
   public constructor() {
     console.log((this.options().rest || {}).path + "  -  " + (this.options().auth || {}).context);
+    this.listen();
+  }
+
+  private listen(){
+    EventBus.instance().on(this.options().address, (data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) =>{
+      //auth
+      try{
+        this.process(data, headers, reply, fail);
+      }catch(e){
+        fail(e);
+      }
+    });
   }
 
   public options(): any {

@@ -4,7 +4,7 @@ import { EventBus } from './event-bus';
 
 export module MicroService {
 
-  export function start(dirs: Array<string>, cb: (eb: EventBus) => void) {
+  export function start(name:string, dirs: Array<string>, cb: (eb: EventBus) => void) {
     var eb = EventBus.instance();
 
     eb.connect(() => {
@@ -20,7 +20,7 @@ export module MicroService {
     var files = readdirSync(__dirname + "/" + dir);
 
     files.forEach((filename) => {
-      EventBus.register(require(__dirname + "/" + dir + "/" + filename).default);
+      new (require(__dirname + "/" + dir + "/" + filename).default);
     });
   }
 
