@@ -1,6 +1,9 @@
-import { MicroService } from './micro-service';
+import { MicroService } from '../../dist';
+import { Options } from '../../dist';
 
-MicroService.start("service", ["action", "flow"], (eb) => {
+var opt = new Options();
+
+MicroService.start("service", opt, (eb) => {
 
   var t = new Date().getTime();
 

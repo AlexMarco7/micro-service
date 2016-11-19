@@ -1,5 +1,5 @@
 
-import { Action } from '../action';
+import { Action } from "../../../dist";
 
 export default class Teste2 extends Action{
 

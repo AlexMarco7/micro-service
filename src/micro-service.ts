@@ -1,27 +1,40 @@
 
 import { readdirSync } from 'fs';
 import { EventBus } from './event-bus';
+import { Options } from './options';
+import { Rest } from './rest';
 
-export module MicroService {
+export class MicroService{
 
-  export function start(name:string, dirs: Array<string>, cb: (eb: EventBus) => void) {
+  public static start(name:string, opt: Options = new Options(), cb: (eb: EventBus) => void = null) {
     var eb = EventBus.instance();
 
     eb.connect(() => {
-      dirs.forEach((d) => {
-        startActions(d);
-      });
-
-      cb(eb);
+      if(opt.http){
+        Rest.start(opt.http, eb, ()=>{
+          MicroService.startDirs(name, opt, eb, cb);
+        });
+      }else{
+        MicroService.startDirs(name, opt, eb, cb);
+      }      
     });
   }
 
-  function startActions(dir: string) {
-    var files = readdirSync(__dirname + "/" + dir);
+  private static startDirs(name:string, opt: Options = new Options(), eb: EventBus, cb: (eb: EventBus) => void = null) {
+    opt.dirs.forEach((d) => { 
+      MicroService.startActions(name, d);
+    });
+
+    cb(eb);
+  }
+
+  private static startActions(name:string, dir: string) {
+    var files = readdirSync(process.cwd() + "/" + dir);
 
     files.forEach((filename) => {
-      new (require(__dirname + "/" + dir + "/" + filename).default);
+      new (require(process.cwd() + "/" + dir + "/" + filename).default)(name);
     });
   }
 
 }
+

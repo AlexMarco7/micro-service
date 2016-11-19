@@ -6,13 +6,15 @@ import { RPC } from './rpc';
 
 export class NatsRPC implements RPC {
   private nats: Client;
+  public host:string = process.env["NATS_HOST"] || "localhost";
+  public port:string = process.env["NATS_PORT"] || "4222";
 
-  public constructor(public host = "localhost") {
+  public constructor() {
 
   }
 
   public connect(cb: () => void) {
-    this.nats = connect(<ClientOpts>{ port: 4222 });
+    this.nats = connect(<ClientOpts>{ host : this.host, port: parseInt(this.port) });
     if (cb) {
       cb();
     }
@@ -31,6 +33,10 @@ export class NatsRPC implements RPC {
         this.nats.publish(replyTo, JSON.stringify(data));
       });
     });
+  }
+
+  public publish(address: string, data, headers) {
+    this.nats.publish(address, JSON.stringify({b:data,h:headers}));
   }
 
 };

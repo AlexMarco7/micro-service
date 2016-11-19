@@ -1,10 +1,8 @@
 {
   "globalDependencies": {
-    "msgpack-lite": "registry:dt/msgpack-lite#0.1.20+20161003194826",
     "node": "registry:env/node#6.0.0+20160918225031"
   },
   "dependencies": {
-    "amqplib": "registry:npm/amqplib#0.4.1+20160726143451",
     "node-uuid": "registry:npm/node-uuid#1.4.7+20160723033700"
   }
 }

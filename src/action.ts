@@ -5,13 +5,30 @@ export class Action {
 
   private eb: EventBus = EventBus.instance();
 
-  public constructor() {
-    console.log((this.options().rest || {}).path + "  -  " + (this.options().auth || {}).context);
+  public constructor(private serviceName) {
+
+    if(this.options().rest){
+     this.registerRest();
+     this.listenRestApi();
+    }
+
     this.listen();
+
+  } 
+
+  private registerRest(){
+    console.log("registing " + this.options().rest.path);
+    this.eb.publish("_micro-service@register-rest", { method : this.options().rest.method, path : this.options().rest.path, address : this.address()}, {});  
+  }
+
+  private listenRestApi(){
+    this.eb.on("_micro-service@new-rest-api-avaiable",()=>{
+      this.registerRest();
+    });
   }
 
   private listen(){
-    EventBus.instance().on(this.options().address, (data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) =>{
+    EventBus.instance().on(this.address(), (data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) =>{
       //auth
       try{
         this.process(data, headers, reply, fail);
@@ -22,11 +39,11 @@ export class Action {
   }
 
   public options(): any {
-    return { address: this.address() };
+    return { };
   }
 
   public address(){
-    return this.constructor.name;
+    return this.serviceName + "@" + this.constructor.name;
   }
 
   public async process(data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) { }
@@ -46,8 +63,8 @@ export class Action {
 
   //static
  
-  public static rest(path: string): Function {
-    return Action.defaultOptionDecorator("rest", { path: path });
+  public static rest(method: string, path: string): Function {
+    return Action.defaultOptionDecorator("rest", { method: method || "post", path: path });
   }
 
   public static auth(context: string, permissions: Array<string> = []): Function {

@@ -1,5 +1,5 @@
 {
-  "name": "micro-service",
+  "name": "micro-service-example",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,11 +7,9 @@
     "globals": "sudo npm install typings; sudo npm install gulp;"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "nats": "^0.6.4",
-    "node-uuid": "^1.4.7",
-    "restify": "^4.3.0"
+    "micro-service" : "file:../dist"
   },
   "devDependencies": {
     "del": "^2.2.2",

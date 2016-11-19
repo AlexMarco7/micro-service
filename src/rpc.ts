@@ -7,5 +7,7 @@ export interface RPC {
 
   on(address: string, func);
 
+  publish(address: string, data, headers);
+
 };
 

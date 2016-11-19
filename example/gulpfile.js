@@ -18,10 +18,9 @@ gulp.task('clean', function () {
 });
 
 gulp.task('ts', function () {
-    var pipe = tsProject.src()
-        .pipe(tsProject());
-    pipe.js.pipe(gulp.dest("./dist"));
-    pipe.dts.pipe(gulp.dest("./dist"));
+    tsProject.src()
+        .pipe(tsProject())
+        .js.pipe(gulp.dest("./dist/"));
 });
 
 gulp.task('copy', function() {
