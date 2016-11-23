@@ -10,8 +10,9 @@ export default class Teste extends Action {
     try{
 
       //console.log("teste");
-      for (var i: number = 0; i < 1; i++) {
-          let arr = await Promise.all([this.call("service@Teste2", data, headers), this.call("service@Teste3", data, headers)]);
+      for (var i: number = 0; i < 1000; i++) {
+        //parallel  call
+          let arr = await Promise.all([this.call("service@teste-2", data, headers), this.call("service@teste-3", data, headers)]);
           data = { 
             count: arr[0].count, 
             count2: arr[1].count2
