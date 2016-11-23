@@ -42,7 +42,7 @@ class Action {
         return {};
     }
     address() {
-        return this.serviceName + "@" + this.constructor.name;
+        return this.serviceName + "@" + this.constructor.name.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])").join("-");
     }
     process(data, headers, reply, fail) {
         return __awaiter(this, void 0, void 0, function* () { });
