@@ -1,6 +1,6 @@
 
-import { EventBus } from "../../../dist";
-import { Action } from "../../../dist";
+import { EventBus } from "micro-service";
+import { Action } from "micro-service";
 
 @Action.rest("post","/teste")
 @Action.auth("account", [])

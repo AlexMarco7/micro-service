@@ -2,7 +2,7 @@
   "name": "micro-service",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "globals": "sudo npm install typings; sudo npm install gulp;"
   },

@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "micro-service" : "file:../dist"
+    "micro-service" : "git://github.com/AlexMarco7/micro-service"
   },
   "devDependencies": {
     "del": "^2.2.2",
