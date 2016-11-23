@@ -17,7 +17,7 @@ export class Action {
   } 
 
   private registerRest(){
-    console.log("registing " + this.options().rest.path);
+    //console.log("registing " + this.options().rest.path);
     this.eb.publish("_micro-service@register-rest", { method : this.options().rest.method, path : this.options().rest.path, address : this.address()}, {});  
   }
 
