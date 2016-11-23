@@ -43,7 +43,7 @@ export class Action {
   }
 
   public address(){
-    return this.serviceName + "@" + this.constructor.name.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])").join("-");
+    return this.serviceName + "@" + this.constructor.name.split("(?=[0-9||A-Z])").join("-").toLowerCase();
   }
 
   public async process(data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) { }
