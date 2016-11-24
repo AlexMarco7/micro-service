@@ -9,12 +9,16 @@ import { Next } from 'restify';
 
 export class Http{
 
-  public static start(options:any , eb: EventBus, cb:() => void) {
+  public static start(eb: EventBus, cb:() => void) {
     var server:Server = restify.createServer();
     server.use(restify.queryParser());
     server.use(restify.bodyParser());
 
-    server.listen(options.port, () => {
+    var ip = process.env["MS_HTTP_IP"] || "0.0.0.0"; 
+    var port = process.env["MS_HTTP_PORT"] || 8080;
+    var prefix = process.env["MS_HTTP_PREFIX"] || "/api/v1";   
+
+    server.listen(ip, port, () => {
       if(cb){
         cb();
       }
@@ -22,8 +26,8 @@ export class Http{
     });
 
     eb.on("micro-service@register-http", (data) => {
-      console.log("registing " + options.prefix + data.path);
-      server[data.method](options.prefix + data.path,(req: Request, res: Response, next: Next) => { console.log(req.path());
+      console.log("registing " + prefix + data.path);
+      server[data.method](prefix + data.path,(req: Request, res: Response, next: Next) => { console.log(req.path());
 
         var header : any = {}; 
 
