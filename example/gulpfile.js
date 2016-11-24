@@ -26,6 +26,6 @@ gulp.task('ts', function () {
 gulp.task('copy', function() {
     gulp.src(['./package.json'], {base : '.'})
     .pipe(gulp.dest('dist'));
-    gulp.src(['./node_modules/**/*'], {base : '.'})
-    .pipe(gulp.dest('dist'));
+   // gulp.src(['./node_modules/**/*'], {base : '.'})
+    //.pipe(gulp.dest('dist'));
 });

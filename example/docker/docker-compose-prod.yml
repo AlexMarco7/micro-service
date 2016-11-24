@@ -6,6 +6,7 @@ services:
       dockerfile : node.dockerfile
       args:
         INDEX: app.js
+        DIR: /app
     networks:
       main:
         aliases : 

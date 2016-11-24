@@ -23,7 +23,7 @@ export default class Teste extends Action {
       } 
 
       reply(data);
-
+ 
     }catch(e){  
       fail(e);
     }

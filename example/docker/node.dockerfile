@@ -1,7 +1,5 @@
 FROM node
 
-ARG INDEX
-
 VOLUME /app
 WORKDIR /app
 
@@ -13,4 +11,4 @@ EXPOSE 8080
 EXPOSE 5858
 EXPOSE 9229
 
-ENTRYPOINT supervisor --debug --inspect /app/app.js 
+ENTRYPOINT bash -c "supervisor --debug --inspect app.js "  

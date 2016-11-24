@@ -10,14 +10,13 @@ services:
     build: 
       context : .
       dockerfile : node.dockerfile
-      args:
-        INDEX: app.js
+    entrypoint : bash -c " cd /app/dist && supervisor --debug --inspect app.js "  
     networks:
       main:
         aliases : 
           - node
     volumes:
-      - ../dist:/app
+      - ..:/app
     depends_on:
       - build  
     environment:
