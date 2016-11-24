@@ -26,7 +26,7 @@ export class Http{
     });
 
     eb.on("micro-service@register-http", (data) => {
-      console.log("registing " + prefix + data.path);
+      console.log("registering " + prefix + data.path);
       server[data.method](prefix + data.path,(req: Request, res: Response, next: Next) => { console.log(req.path());
 
         var header : any = {}; 

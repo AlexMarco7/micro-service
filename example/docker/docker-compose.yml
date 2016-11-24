@@ -21,7 +21,7 @@ services:
       - build  
     environment:
       MS_NATS_URL : "nats://nats:4222"
-      MS_EVENT_BUS_TYPE : "auto"
+      MS_EVENT_BUS_TYPE : "rpc"
       MS_EVENT_BUS_TIMEOUT : 30000
       MS_HTTP : "true"
       MS_HTTP_PORT : 8080

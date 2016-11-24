@@ -32,7 +32,7 @@ export class NatsRPC implements RPC {
         err.name = response.c || "500";
         callback(err, null);
       } else {
-        callback(null, JSON.parse(response));
+        callback(null, JSON.parse(response.d));
       }
     });
     this.nats.timeout(sid, timeout || 30000, 1, () => {
