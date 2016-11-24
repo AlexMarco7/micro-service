@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "node_args": ["--debug=5858"],
   "scripts": {
     "globals": "sudo npm install typings; sudo npm install gulp;"
   },

@@ -1,8 +1,33 @@
 version: '2'
 services:
+  node:
+    build: 
+      context : .
+      dockerfile : node.dockerfile
+      args:
+        INDEX: app.js
+    networks:
+      main:
+        aliases : 
+          - node
+    volumes:
+      - ./dist:/app 
+    environment:
+      MS_NATS_URL : "nats://nats:4222"
+    ports:
+      - "8080:8080"
+      - "5858:5858"  
+
   nats:
     image: nats
+    networks:
+      main:
+        aliases : 
+          - nats
     ports:
       - "4222:4222"
       - "8222:8222"
       - "6222:6222"
+
+networks:
+   main: 
