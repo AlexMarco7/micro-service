@@ -13,6 +13,7 @@
     "micro-service" : "git://github.com/AlexMarco7/micro-service"
   },
   "devDependencies": {
+    "gulp" : "^3.9.1",
     "del": "^2.2.2",
     "gulp-typescript": "^3.0.2",
     "gulp-watch": "^4.3.10",

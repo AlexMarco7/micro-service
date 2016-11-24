@@ -1,0 +1,7 @@
+version: '2'
+services:
+  npm:
+    image: node
+    volumes:
+      - ../dist:/app 
+    command: bash -c "cd /app && rm -f -r node_modules && npm install"

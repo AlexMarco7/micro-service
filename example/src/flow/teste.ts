@@ -20,11 +20,11 @@ export default class Teste extends Action {
           };*/ 
          //console.log(i + " -- " + JSON.stringify(data));  
          data = await this.call("service@teste-3", data, headers);   
-      }
+      } 
 
       reply(data);
 
-    }catch(e){ 
+    }catch(e){  
       fail(e);
     }
   }

@@ -9,7 +9,7 @@ var tsProject = ts.createProject('tsconfig.json');
 gulp.task('default', ['clean','copy','ts']);
 
 
-gulp.task('watch', ['clean','copy','ts'], function(){
+gulp.task('watch', ['clean', 'copy','ts'], function(){
     gulp.watch('src/**/*.ts', function(e) { gulp.start('ts');});
 });
 
@@ -24,6 +24,8 @@ gulp.task('ts', function () {
 });
 
 gulp.task('copy', function() {
-    gulp.src(['./package.json'])
-    .pipe(gulp.dest('./dist'));
+    gulp.src(['./package.json'], {base : '.'})
+    .pipe(gulp.dest('dist'));
+    gulp.src(['./node_modules/**/*'], {base : '.'})
+    .pipe(gulp.dest('dist'));
 });
