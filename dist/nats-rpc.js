@@ -23,7 +23,7 @@ class NatsRPC {
                 callback(err, null);
             }
             else {
-                callback(null, JSON.parse(response));
+                callback(null, JSON.parse(response.d));
             }
         });
         this.nats.timeout(sid, timeout || 30000, 1, () => {
