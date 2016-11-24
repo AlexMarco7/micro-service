@@ -8,7 +8,7 @@ export declare class EventBus {
     private type;
     constructor();
     connect(cb: () => void): void;
-    emit(address: string, data?: any, headers?: any, cb?: (e: Error, d?: any) => void): void;
+    emit(address: string, data?: any, headers?: any, cb?: (e: Error, d?: any) => void, timeout?: number): void;
     publish(address: string, data?: any, headers?: any): void;
-    on(addr: string, func: (d: any, h: any, reply: (d: any) => void, fail: (e: Error) => void) => void): void;
+    on(addr: string, func: (d: any, h: any, reply: (d: any) => void, fail: (e: Error, code: string) => void) => void): void;
 }

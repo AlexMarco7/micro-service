@@ -2,13 +2,13 @@
 const fs_1 = require('fs');
 const event_bus_1 = require('./event-bus');
 const options_1 = require('./options');
-const rest_1 = require('./rest');
+const http_1 = require('./http');
 class MicroService {
     static start(name, opt = new options_1.Options(), cb = null) {
         var eb = event_bus_1.EventBus.instance();
         eb.connect(() => {
             if (opt.http) {
-                rest_1.Rest.start(opt.http, eb, () => {
+                http_1.Http.start(opt.http, eb, () => {
                     MicroService.startDirs(name, opt, eb, cb);
                 });
             }

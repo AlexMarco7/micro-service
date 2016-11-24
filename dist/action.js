@@ -12,19 +12,38 @@ class Action {
     constructor(serviceName) {
         this.serviceName = serviceName;
         this.eb = event_bus_1.EventBus.instance();
-        if (this.options().rest) {
-            this.registerRest();
-            this.listenRestApi();
+        if (this.options().http) {
+            this.registerHttp();
+            this.listenHttpApi();
+        }
+        if (this.options().websocket) {
+            this.registerWebSocket();
+            this.listenWebSocketApi();
         }
         this.listen();
     }
-    registerRest() {
-        //console.log("registing " + this.options().rest.path);
-        this.eb.publish("_micro-service@register-rest", { method: this.options().rest.method, path: this.options().rest.path, address: this.address() }, {});
+    registerHttp() {
+        if (typeof this.options().http.method == "string")
+            this.eb.publish("micro-service@register-http", { method: this.options().http.method, path: this.options().http.path, address: this.address() }, {});
+        else
+            for (let method in this.options().http.method)
+                this.eb.publish("micro-service@register-http", { method: method, path: this.options().http.path, address: this.address() }, {});
     }
-    listenRestApi() {
-        this.eb.on("_micro-service@new-rest-api-avaiable", () => {
-            this.registerRest();
+    listenHttpApi() {
+        this.eb.on("micro-service@new-http-api-avaiable", () => {
+            this.registerHttp();
+        });
+    }
+    registerWebSocket() {
+        if (typeof this.options().websocket.method == "string")
+            this.eb.publish("micro-service@register-web-socket", { websocket: this.options().websocket.address, address: this.address() }, {});
+        else
+            for (let address in this.options().websocket.address)
+                this.eb.publish("micro-service@register-web-socket", { websocket: address, address: this.address() }, {});
+    }
+    listenWebSocketApi() {
+        this.eb.on("micro-service@new-web-socket-api-avaiable", () => {
+            this.registerWebSocket();
         });
     }
     listen() {
@@ -60,8 +79,11 @@ class Action {
         });
     }
     //static
-    static rest(method, path) {
-        return Action.defaultOptionDecorator("rest", { method: method || "post", path: path });
+    static http(method, path) {
+        return Action.defaultOptionDecorator("http", { method: method || "post", path: path });
+    }
+    static websocket(address) {
+        return Action.defaultOptionDecorator("websocket", { address: address });
     }
     static auth(context, permissions = []) {
         return Action.defaultOptionDecorator("auth", { context: context, permissions: permissions });

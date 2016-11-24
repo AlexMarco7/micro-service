@@ -2,7 +2,7 @@
 import { readdirSync } from 'fs';
 import { EventBus } from './event-bus';
 import { Options } from './options';
-import { Rest } from './rest';
+import { Http } from './http';
 
 export class MicroService{
 
@@ -11,7 +11,7 @@ export class MicroService{
 
     eb.connect(() => {
       if(opt.http){
-        Rest.start(opt.http, eb, ()=>{
+        Http.start(opt.http, eb, ()=>{
           MicroService.startDirs(name, opt, eb, cb);
         });
       }else{

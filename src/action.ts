@@ -7,42 +7,66 @@ export class Action {
 
   public constructor(private serviceName) {
 
-    if(this.options().rest){
-     this.registerRest();
-     this.listenRestApi();
+    if (this.options().http) {
+      this.registerHttp();
+      this.listenHttpApi();
+    }
+
+    if (this.options().websocket) {
+      this.registerWebSocket();
+      this.listenWebSocketApi();
     }
 
     this.listen();
 
-  } 
-
-  private registerRest(){
-    //console.log("registing " + this.options().rest.path);
-    this.eb.publish("_micro-service@register-rest", { method : this.options().rest.method, path : this.options().rest.path, address : this.address()}, {});  
   }
 
-  private listenRestApi(){
-    this.eb.on("_micro-service@new-rest-api-avaiable",()=>{
-      this.registerRest();
+  private registerHttp() {
+    if (typeof this.options().http.method == "string")
+      this.eb.publish("micro-service@register-http", { method: this.options().http.method, path: this.options().http.path, address: this.address() }, {});
+    else
+      for (let method in this.options().http.method)
+        this.eb.publish("micro-service@register-http", { method: method, path: this.options().http.path, address: this.address() }, {});
+
+  }
+
+  private listenHttpApi() {
+    this.eb.on("micro-service@new-http-api-avaiable", () => {
+      this.registerHttp();
+    });
+  }
+  
+  private registerWebSocket() {
+    if (typeof this.options().websocket.method == "string")
+      this.eb.publish("micro-service@register-web-socket", { websocket: this.options().websocket.address, address: this.address() }, {});
+    else
+      for (let address in this.options().websocket.address)
+        this.eb.publish("micro-service@register-web-socket", { websocket: address, address: this.address() }, {});
+  }
+
+  private listenWebSocketApi() {
+    this.eb.on("micro-service@new-web-socket-api-avaiable", () => {
+      this.registerWebSocket();
     });
   }
 
-  private listen(){
-    EventBus.instance().on(this.address(), (data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) =>{
+  private listen() {
+    EventBus.instance().on(this.address(), (data: any, headers: any, reply: (d: any) => void, fail: (e: Error) => void) => {
       //auth
-      try{
+      
+      try {
         this.process(data, headers, reply, fail);
-      }catch(e){
+      } catch (e) { 
         fail(e);
       }
     });
   }
 
   public options(): any {
-    return { };
+    return {};
   }
 
-  public address(){
+  public address() {
     return this.serviceName + "@" + this.constructor.name.split(/(?=[0-9||A-Z])/).join("-").toLowerCase();
   }
 
@@ -62,9 +86,13 @@ export class Action {
 
 
   //static
- 
-  public static rest(method: string, path: string): Function {
-    return Action.defaultOptionDecorator("rest", { method: method || "post", path: path });
+
+  public static http(method: string, path: string): Function {
+    return Action.defaultOptionDecorator("http", { method: method || "post", path: path });
+  }
+
+  public static websocket(address: string): Function {
+    return Action.defaultOptionDecorator("websocket", { address: address });
   }
 
   public static auth(context: string, permissions: Array<string> = []): Function {
@@ -72,7 +100,7 @@ export class Action {
   }
 
   private static defaultOptionDecorator(optName: string, optValue: any) {
-    return function(constructor: Function){
+    return function (constructor: Function) {
       var currOption = constructor.prototype.options;
       constructor.prototype.options = () => {
         var opt = currOption.apply(constructor.prototype);

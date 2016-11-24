@@ -5,7 +5,7 @@ export declare class NatsRPC implements RPC {
     port: string;
     constructor();
     connect(cb: () => void): void;
-    emit(address: string, data: any, headers: any, cb: (e: Error, d?: any) => void): void;
+    emit(address: string, data: any, headers: any, cb: (e: Error, d?: any) => void, timeout: number): void;
     on(address: string, func: Function): void;
     publish(address: string, data: any, headers: any): void;
 }

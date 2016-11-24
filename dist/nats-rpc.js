@@ -2,8 +2,8 @@
 const nats_1 = require('nats');
 class NatsRPC {
     constructor() {
-        this.host = process.env["NATS_HOST"] || "localhost";
-        this.port = process.env["NATS_PORT"] || "4222";
+        this.host = process.env["MS_NATS_HOST"] || "localhost";
+        this.port = process.env["MS_NATS_PORT"] || "4222";
     }
     connect(cb) {
         this.nats = nats_1.connect({ host: this.host, port: parseInt(this.port) });
@@ -11,16 +11,33 @@ class NatsRPC {
             cb();
         }
     }
-    emit(address, data, headers, cb) {
-        this.nats.request(address, JSON.stringify({ b: data, h: headers }), { 'max': 1 }, (response) => {
-            cb(null, JSON.parse(response));
+    emit(address, data, headers, cb, timeout) {
+        let callback = (e, d) => {
+            if (cb)
+                cb(e, d);
+            cb = null;
+        };
+        let sid = this.nats.request(address, JSON.stringify({ b: data, h: headers }), { max: 1 }, (response) => {
+            if (response.e) {
+                var err = new Error(response.e);
+                err.name = response.c || "500";
+                callback(err, null);
+            }
+            else {
+                callback(null, JSON.parse(response));
+            }
+        });
+        this.nats.timeout(sid, timeout || 30000, 1, () => {
+            var err = new Error("Timeout");
+            err.name = "500";
+            callback(err, null);
         });
     }
     on(address, func) {
         this.nats.subscribe(address, (request, replyTo) => {
             var d = JSON.parse(request);
             func(d.b, d.h, (err, data) => {
-                this.nats.publish(replyTo, JSON.stringify(data));
+                this.nats.publish(replyTo, JSON.stringify(err ? { e: err.message, c: err.name } : { d: data }));
             });
         });
     }

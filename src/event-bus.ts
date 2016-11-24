@@ -14,7 +14,7 @@ export class EventBus {
   private localAddresses: any = {};
   private rpc: RPC;
   private serviceName:string = "service";
-  private type:string = 'auto';
+  private type:string = process.env["MS_EVENT_BUS_TYPE"] || 'local';
 
   public constructor() {
     this.rpc = new NatsRPC();
@@ -25,11 +25,22 @@ export class EventBus {
     this.rpc.connect(cb);
   }
 
-  public emit(address: string, data : any = {}, headers : any = {}, cb: (e: Error, d?: any) => void = null) {
+  public emit(address: string, data : any = {}, headers : any = {}, cb: (e: Error, d?: any) => void = null, timeout : number = null) {
+    let callback = (e: Error, d?: any)=>{
+       if(cb)
+         cb(e,d);
+       cb = null;  
+    };
+
     if (this.type != "rpc" && this.localAddresses[address]) {
-      this.emitter.emit(address, data, headers, cb);
+      this.emitter.emit(address, data, headers, callback);
+      setTimeout(() => {
+        var err = new Error("Timeout");
+        err.name = "500";
+        callback(err, null);
+      }, timeout || parseInt(process.env["MS_EVENT_BUS_TIMEOUT"] || "30000"));
     } else {
-      this.rpc.emit(address, data, headers, cb);
+      this.rpc.emit(address, data, headers, callback, timeout || parseInt(process.env["MS_EVENT_BUS_TIMEOUT"]  || "30000"));
     }
   };
 
@@ -41,13 +52,14 @@ export class EventBus {
     }
   };
 
-  public on(addr: string, func: (d: any, h: any, reply: (d: any) => void, fail: (e: Error) => void) => void) {
+  public on(addr: string, func: (d: any, h: any, reply: (d: any) => void, fail: (e: Error, code: string) => void) => void) {
     this.localAddresses[addr] = true;
 
     var f = (d: any, h: any, cb: (e: Error, d?: any) => {}) => {
       func(d, h, (d) => {
         cb(null, d || {});
-      }, (err: Error) => {
+      }, (err: Error, code: string = "500") => {
+        err.name = code;
         cb(err);
       });
     };
