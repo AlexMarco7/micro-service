@@ -16,7 +16,7 @@ export default class Teste extends Action {
          data = { 
             count: arr[0].count, 
             count2: arr[1].count2
-         };    
+         };      
       } 
 
       console.log("time: " + (new Date().getTime() - t) + " - " + JSON.stringify(data) );

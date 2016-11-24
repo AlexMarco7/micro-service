@@ -7,6 +7,12 @@ var opt = new Options();
 
 MicroService.start("service", opt, (eb) => {
 
-});
 
+  eb.emit('service@teste', { count: 0, count2: 0 }, { header: 'header' }, (err, data) => {
+    
+  });
+
+ 
+});
+ 
 

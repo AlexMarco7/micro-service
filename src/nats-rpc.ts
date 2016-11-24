@@ -27,12 +27,14 @@ export class NatsRPC implements RPC {
     };
 
     let sid = this.nats.request(address, JSON.stringify({ b: data, h: headers }), { max: 1 }, (response) => {
+      response = JSON.parse(response);
       if (response.e) {
         var err = new Error(response.e);
         err.name = response.c || "500";
         callback(err, null);
-      } else {
-        callback(null, JSON.parse(response.d));
+      }
+      else {
+        callback(null, response.d);
       }
     });
     this.nats.timeout(sid, timeout || 30000, 1, () => {

@@ -10,7 +10,7 @@ services:
     build: 
       context : .
       dockerfile : node.dockerfile
-    entrypoint : bash -c " cd /app/dist && supervisor --debug --inspect app.js "  
+    entrypoint : bash -c " cd /app/dist && sleep 8 && supervisor --debug --force-watch --inspect --restart-verbose app.js "  
     networks:
       main:
         aliases : 
