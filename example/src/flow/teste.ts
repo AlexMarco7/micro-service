@@ -1,7 +1,7 @@
-import { Action } from "../../../dist";
-//import { Action } from "micro-service";
-import { EventBus } from "../../../dist";
-//import { EventBus } from "micro-service";
+//import { Action } from "../../../dist";
+import { Action } from "micro-service";
+//import { EventBus } from "../../../dist";
+import { EventBus } from "micro-service";
 
 @Action.http("post","/teste")
 export default class Teste extends Action {

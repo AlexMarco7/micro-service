@@ -1,5 +1,5 @@
-import { Action } from "../../../dist";
-//import { Action } from "micro-service";
+//import { Action } from "../../../dist";
+import { Action } from "micro-service";
 
 export default class Teste2 extends Action{
 
