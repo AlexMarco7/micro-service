@@ -11,20 +11,18 @@ services:
       context : .
       dockerfile : node.dockerfile
     entrypoint : bash -c " cd /app/dist && sleep 8 && supervisor --force-watch --inspect --restart-verbose app.js "  
-    networks:
-      main:
-        aliases : 
-          - node
     volumes:
       - ..:/app
     depends_on:
       - build  
+    links:
+      - "nats:nats" 
     environment:
       MS_NATS_URL : "nats://nats:4222"
       MS_EVENT_BUS_TYPE : "auto"
       MS_EVENT_BUS_TIMEOUT : 30000
       MS_HTTP : "true"
-      MS_HTTP_PORT : 8081
+      MS_HTTP_PORT : 8080
       MS_HTTP_IP : "0.0.0.0"
       MS_HTTP_PREFIX : "/api/v1"
     ports:
@@ -33,15 +31,8 @@ services:
       - "9229:9229"
 
   nats:
-    image: nats
-    networks:
-      main:
-        aliases : 
-          - nats
+    image: nats 
     ports:
       - "4222:4222"
       - "8222:8222"
       - "6222:6222"
-
-networks:
-   main: 

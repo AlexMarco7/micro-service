@@ -11,7 +11,7 @@ export default class Teste extends Action {
       //fail(new Error("Unauthorized"),401);
       
       var t = new Date().getTime();
-
+ 
       for (var i: number = 0; i < 10000; i++) {
         //parallel  call
          let arr = await Promise.all([this.call("service@teste-2", data, headers), this.call("service@teste-3", data, headers)]);
