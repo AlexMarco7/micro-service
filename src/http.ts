@@ -19,6 +19,7 @@ export class Http{
     var prefix = process.env["MS_HTTP_PREFIX"] || "/api/v1";   
 
     server.listen(ip, port, () => {
+      console.log("listening " + ip + ":" +port);
       if(cb){
         cb();
       }
