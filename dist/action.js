@@ -12,6 +12,7 @@ class Action {
     constructor(serviceName) {
         this.serviceName = serviceName;
         this.eb = event_bus_1.EventBus.instance();
+        this.listen();
         if (this.options().http) {
             this.registerHttp();
             this.listenHttpApi();
@@ -20,7 +21,6 @@ class Action {
             this.registerWebSocket();
             this.listenWebSocketApi();
         }
-        this.listen();
     }
     registerHttp() {
         if (typeof this.options().http.method == "string")

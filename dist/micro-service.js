@@ -7,14 +7,12 @@ class MicroService {
     static start(name, opt = new options_1.Options(), cb = null) {
         var eb = event_bus_1.EventBus.instance();
         eb.connect(() => {
-            if (process.env["MS_HTTP"]) {
-                http_1.Http.start(eb, () => {
-                    MicroService.startDirs(name, opt, eb, cb);
-                });
-            }
-            else {
-                MicroService.startDirs(name, opt, eb, cb);
-            }
+            MicroService.startDirs(name, opt, eb, () => {
+                if (process.env["MS_HTTP"]) {
+                    http_1.Http.start(eb, () => { });
+                }
+                cb(eb);
+            });
         });
     }
     static startDirs(name, opt = new options_1.Options(), eb, cb = null) {

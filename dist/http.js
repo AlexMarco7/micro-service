@@ -8,8 +8,8 @@ class Http {
         var ip = process.env["MS_HTTP_IP"] || "0.0.0.0";
         var port = process.env["MS_HTTP_PORT"] || 8080;
         var prefix = process.env["MS_HTTP_PREFIX"] || "/api/v1";
-        server.listen(ip, port, () => {
-            console.log("listening " + ip + ":" + port);
+        server.listen(port, () => {
+            console.log('listening at %s', server.name, server.url);
             if (cb) {
                 cb();
             }

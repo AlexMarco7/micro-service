@@ -5,8 +5,8 @@ import { ClientOpts } from 'nats';
 import { RPC } from './rpc';
 
 export class NatsRPC implements RPC {
-  private nats: Client;
-  public url: string = process.env["MS_NATS_URL"] || "nats://nats:4222";
+  public nats: Client;
+  public url: string = process.env["MS_NATS_URL"] || "nats://localhost:4222";
 
   public constructor() {
 

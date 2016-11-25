@@ -10,13 +10,12 @@ export class MicroService{
     var eb = EventBus.instance();
 
     eb.connect(() => {
-      if(process.env["MS_HTTP"]){
-        Http.start(eb, ()=>{
-          MicroService.startDirs(name, opt, eb, cb);
-        });
-      }else{
-        MicroService.startDirs(name, opt, eb, cb);
-      }      
+      MicroService.startDirs(name, opt, eb, ()=>{
+        if(process.env["MS_HTTP"]){
+          Http.start(eb, ()=>{});
+        }
+        cb(eb);
+      });
     });
   }
 

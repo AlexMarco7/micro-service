@@ -6,6 +6,7 @@ export class Action {
   private eb: EventBus = EventBus.instance();
 
   public constructor(private serviceName) {
+    this.listen();
 
     if (this.options().http) {
       this.registerHttp();
@@ -16,8 +17,6 @@ export class Action {
       this.registerWebSocket();
       this.listenWebSocketApi();
     }
-
-    this.listen();
 
   }
 

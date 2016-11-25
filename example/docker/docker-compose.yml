@@ -24,7 +24,7 @@ services:
       MS_EVENT_BUS_TYPE : "auto"
       MS_EVENT_BUS_TIMEOUT : 30000
       MS_HTTP : "true"
-      MS_HTTP_PORT : 8080
+      MS_HTTP_PORT : 8081
       MS_HTTP_IP : "0.0.0.0"
       MS_HTTP_PREFIX : "/api/v1"
     ports:

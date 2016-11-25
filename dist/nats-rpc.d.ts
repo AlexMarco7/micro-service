@@ -1,6 +1,7 @@
+import { Client } from 'nats';
 import { RPC } from './rpc';
 export declare class NatsRPC implements RPC {
-    private nats;
+    nats: Client;
     url: string;
     constructor();
     connect(cb: () => void): void;

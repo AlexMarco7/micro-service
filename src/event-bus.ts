@@ -32,7 +32,7 @@ export class EventBus {
        cb = null;  
     };
 
-    if (this.type != "rpc" && this.localAddresses[address]) {
+    if (this.type == "local" || (this.type != "rpc" && this.localAddresses[address]))  {
       this.emitter.emit(address, data, headers, callback);
       setTimeout(() => {
         var err = new Error("Timeout");
@@ -45,7 +45,7 @@ export class EventBus {
   };
 
   public publish(address: string, data: any = {}, headers: any = {}) {
-    if (this.type != "rpc" && this.localAddresses[address]) {
+    if (this.type == "local" || (this.type != "rpc" && this.localAddresses[address])) {
       this.emitter.emit(address, data, headers);
     } else {
       this.rpc.publish(address, data, headers);

@@ -2,7 +2,7 @@
 const nats_1 = require('nats');
 class NatsRPC {
     constructor() {
-        this.url = process.env["MS_NATS_URL"] || "nats://nats:4222";
+        this.url = process.env["MS_NATS_URL"] || "nats://localhost:4222";
     }
     connect(cb) {
         this.nats = nats_1.connect(this.url);
